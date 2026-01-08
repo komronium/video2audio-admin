@@ -44,6 +44,28 @@ class HomeView(View):
             ).count(),
         ]
 
+        daily_conversions = [
+            Conversion.objects.filter(created_at__gte=monday).count(),
+            Conversion.objects.filter(
+                created_at__gte=monday + datetime.timedelta(days=1)
+            ).count(),
+            Conversion.objects.filter(
+                created_at__gte=monday + datetime.timedelta(days=2)
+            ).count(),
+            Conversion.objects.filter(
+                created_at__gte=monday + datetime.timedelta(days=3)
+            ).count(),
+            Conversion.objects.filter(
+                created_at__gte=monday + datetime.timedelta(days=4)
+            ).count(),
+            Conversion.objects.filter(
+                created_at__gte=monday + datetime.timedelta(days=5)
+            ).count(),
+            Conversion.objects.filter(
+                created_at__gte=monday + datetime.timedelta(days=6)
+            ).count(),
+        ]
+
         return render(
             request,
             "index.html",
@@ -55,5 +77,6 @@ class HomeView(View):
                 "premium_users": premium_users,
                 "premium_users_today": premium_users_today,
                 "daily_users": daily_users,
+                "daily_conversions": daily_conversions,
             },
         )
