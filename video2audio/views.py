@@ -97,6 +97,7 @@ class HomeView(View):
                 "weekdays": json.dumps(weekdays),
                 "users": users,
                 "users_today": users_today,
+                "average_users": sum(daily_users) / 7,
                 "conversions": conversions,
                 "conversions_today": conversions_today,
                 "premium_users": premium_users,
