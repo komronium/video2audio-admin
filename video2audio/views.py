@@ -93,7 +93,7 @@ class HomeView(View):
             request,
             "index.html",
             {
-                "weekdays": weekdays,
+                "weekdays": str(weekdays),
                 "users": users,
                 "users_today": users_today,
                 "conversions": conversions,
