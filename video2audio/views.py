@@ -19,29 +19,15 @@ class HomeView(View):
             is_premium=True, joined_at=datetime.date.today()
         ).count()
 
-        monday = datetime.date.today() - datetime.timedelta(
-            days=datetime.date.today().weekday()
-        )
+        today = datetime.date.today()
         daily_users = [
-            User.objects.filter(joined_at__gte=monday).count(),
-            User.objects.filter(
-                joined_at__gte=monday + datetime.timedelta(days=1)
-            ).count(),
-            User.objects.filter(
-                joined_at__gte=monday + datetime.timedelta(days=2)
-            ).count(),
-            User.objects.filter(
-                joined_at__gte=monday + datetime.timedelta(days=3)
-            ).count(),
-            User.objects.filter(
-                joined_at__gte=monday + datetime.timedelta(days=4)
-            ).count(),
-            User.objects.filter(
-                joined_at__gte=monday + datetime.timedelta(days=5)
-            ).count(),
-            User.objects.filter(
-                joined_at__gte=monday + datetime.timedelta(days=6)
-            ).count(),
+            User.objects.filter(joined_at=today - datetime.timedelta(days=6)).count(),
+            User.objects.filter(joined_at=today - datetime.timedelta(days=5)).count(),
+            User.objects.filter(joined_at=today - datetime.timedelta(days=4)).count(),
+            User.objects.filter(joined_at=today - datetime.timedelta(days=3)).count(),
+            User.objects.filter(joined_at=today - datetime.timedelta(days=2)).count(),
+            User.objects.filter(joined_at=today - datetime.timedelta(days=1)).count(),
+            User.objects.filter(joined_at=today).count(),
         ]
 
         daily_conversions = [
