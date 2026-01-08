@@ -20,6 +20,17 @@ class HomeView(View):
         ).count()
 
         today = datetime.date.today()
+
+        weekdays = [
+            today.strftime("%A"),
+            (today - datetime.timedelta(days=1)).strftime("%A"),
+            (today - datetime.timedelta(days=2)).strftime("%A"),
+            (today - datetime.timedelta(days=3)).strftime("%A"),
+            (today - datetime.timedelta(days=4)).strftime("%A"),
+            (today - datetime.timedelta(days=5)).strftime("%A"),
+            (today - datetime.timedelta(days=6)).strftime("%A"),
+        ]
+
         daily_users = [
             User.objects.filter(joined_at=today - datetime.timedelta(days=6)).count(),
             User.objects.filter(joined_at=today - datetime.timedelta(days=5)).count(),
@@ -82,6 +93,7 @@ class HomeView(View):
             request,
             "index.html",
             {
+                "weekdays": weekdays,
                 "users": users,
                 "users_today": users_today,
                 "conversions": conversions,
