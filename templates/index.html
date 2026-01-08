@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="uz" class="h-full">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Video2Audio Bot - Admin Panel</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&amp;display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="/_sdk/element_sdk.js"></script>
+        <style>
+            body {
+                box-sizing: border-box;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --bg-primary: #f8fafc;
+                --bg-card: #ffffff;
+                --text-primary: #0f172a;
+                --text-secondary: #64748b;
+                --accent-blue: #3b82f6;
+                --accent-green: #10b981;
+            }
+
+            body {
+                font-family: "Sora", sans-serif;
+                background: #f8fafc;
+                color: #0f172a;
+                min-height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .app-wrapper {
+                width: 100%;
+                min-height: 100%;
+                padding: 2.5rem;
+                overflow-y: auto;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .dashboard-header {
+                margin-bottom: 2.5rem;
+            }
+
+            .dashboard-header h1 {
+                font-size: 2rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: #0f172a;
+                letter-spacing: -0.5px;
+            }
+
+            .dashboard-header p {
+                color: #64748b;
+                font-size: 0.95rem;
+                font-weight: 400;
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .stat-card {
+                background: #ffffff;
+                border-radius: 12px;
+                padding: 1.75rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+            }
+
+            .stat-card:hover {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                transform: translateY(-2px);
+            }
+
+            .stat-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.25rem;
+            }
+
+            .stat-title {
+                font-size: 0.875rem;
+                color: #64748b;
+                font-weight: 500;
+            }
+
+            .stat-icon {
+                font-size: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: #0f172a;
+            }
+
+            .stat-change {
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #10b981;
+            }
+
+            .charts-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .chart-card {
+                background: #ffffff;
+                border-radius: 12px;
+                padding: 1.75rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            }
+
+            .chart-header {
+                margin-bottom: 1.5rem;
+            }
+
+            .chart-header h3 {
+                font-size: 1rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+                color: #0f172a;
+            }
+
+            .chart-tabs {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .chart-tab {
+                padding: 0.5rem 1rem;
+                background: #f1f5f9;
+                border: none;
+                border-radius: 8px;
+                color: #64748b;
+                cursor: pointer;
+                font-size: 0.875rem;
+                font-weight: 500;
+                font-family: "Sora", sans-serif;
+                transition: all 0.2s;
+            }
+
+            .chart-tab:hover {
+                background: #e2e8f0;
+                color: #0f172a;
+            }
+
+            .chart-tab.active {
+                background: #3b82f6;
+                color: white;
+            }
+
+            .chart-container {
+                position: relative;
+                height: 300px;
+            }
+
+            .details-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .detail-card {
+                background: #ffffff;
+                border-radius: 12px;
+                padding: 1.75rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            }
+
+            .detail-card h3 {
+                font-size: 1rem;
+                font-weight: 600;
+                margin-bottom: 1.5rem;
+                color: #0f172a;
+            }
+
+            .detail-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.25rem;
+                background: #f8fafc;
+                border-radius: 8px;
+                margin-bottom: 0.75rem;
+                transition: all 0.2s ease;
+            }
+
+            .detail-item:hover {
+                background: #f1f5f9;
+            }
+
+            .detail-item:last-child {
+                margin-bottom: 0;
+            }
+
+            .detail-label {
+                color: #64748b;
+                font-size: 0.875rem;
+                font-weight: 500;
+            }
+
+            .detail-value {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: #3b82f6;
+            }
+
+            .progress-bar {
+                width: 100%;
+                height: 6px;
+                background: #e2e8f0;
+                border-radius: 3px;
+                overflow: hidden;
+                margin-top: 0.75rem;
+            }
+
+            .progress-fill {
+                height: 100%;
+                background: #3b82f6;
+                border-radius: 3px;
+                transition: width 0.6s ease;
+            }
+
+            @media (max-width: 768px) {
+                .app-wrapper {
+                    padding: 1.5rem;
+                }
+
+                .stats-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .charts-section {
+                    grid-template-columns: 1fr;
+                }
+
+                .details-section {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+        <style>
+            @view-transition {
+                navigation: auto;
+            }
+        </style>
+        <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+        <script
+            src="https://cdn.tailwindcss.com"
+            type="text/javascript"
+        ></script>
+    </head>
+    <body class="h-full">
+        <div class="app-wrapper h-full">
+            <div class="dashboard-header">
+                <h1 id="dashboardTitle">Video2Audio Bot Admin</h1>
+                <p>Real-time monitoring va statistika</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Telegram Starts</span>
+                        <div class="stat-icon">🚀</div>
+                    </div>
+                    <div class="stat-value">12,847</div>
+                    <div class="stat-change">↑ +234 bugun</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Total Users</span>
+                        <div class="stat-icon">👥</div>
+                    </div>
+                    <div class="stat-value">{{ users | default:0}}</div>
+                    <div class="stat-change">{% if users_today > 0 %} + {{ users_today }}{% endif %}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Total Conversions</span>
+                        <div class="stat-icon">🎵</div>
+                    </div>
+                    <div class="stat-value">{{ conversions | default:0}}</div>
+                    <div class="stat-change">{% if conversions_today > 0 %} + {{ conversions_today }}{% endif %}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Premium Users</span>
+                        <div class="stat-icon">⭐</div>
+                    </div>
+                    <div class="stat-value">{{ premium_users | default:0}}</div>
+                    <div class="stat-change">{% if premium_users_today > 0 %} + {{ premium_users_today }}{% endif %}</div>
+                </div>
+            </div>
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 id="statsHeading">Foydalanuvchilar Statistikasi</h3>
+                        <div class="chart-tabs">
+                            <button
+                                class="chart-tab active"
+                                onclick="updateUsersChart('daily')"
+                            >
+                                Kunlik
+                            </button>
+                            <button
+                                class="chart-tab"
+                                onclick="updateUsersChart('monthly')"
+                            >
+                                Oylik
+                            </button>
+                            <button
+                                class="chart-tab"
+                                onclick="updateUsersChart('yearly')"
+                            >
+                                Yillik
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="usersChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Konversiya Statistikasi</h3>
+                        <div class="chart-tabs">
+                            <button
+                                class="chart-tab active"
+                                onclick="updateConversionsChart('daily')"
+                            >
+                                Kunlik
+                            </button>
+                            <button
+                                class="chart-tab"
+                                onclick="updateConversionsChart('monthly')"
+                            >
+                                Oylik
+                            </button>
+                            <button
+                                class="chart-tab"
+                                onclick="updateConversionsChart('yearly')"
+                            >
+                                Yillik
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="conversionsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="details-section">
+                <div class="detail-card">
+                    <h3>💎 Diamond Statistikasi</h3>
+                    <div class="detail-item">
+                        <div style="flex: 1">
+                            <div class="detail-label">Jami Sotilgan</div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 100%"
+                                ></div>
+                            </div>
+                        </div>
+                        <div class="detail-value">15,420</div>
+                    </div>
+                    <div class="detail-item">
+                        <div style="flex: 1">
+                            <div class="detail-label">Ishlatilgan</div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 78%"
+                                ></div>
+                            </div>
+                        </div>
+                        <div class="detail-value">12,028</div>
+                    </div>
+                    <div class="detail-item">
+                        <div style="flex: 1">
+                            <div class="detail-label">Qoldiq</div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 22%"
+                                ></div>
+                            </div>
+                        </div>
+                        <div class="detail-value">3,392</div>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <h3>⭐ Premium Obunalar</h3>
+                    <div class="detail-item">
+                        <div class="detail-label">Lifetime Premium</div>
+                        <div class="detail-value">1,247</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Oylik Daromad</div>
+                        <div class="detail-value">$3,741</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Conversion Rate</div>
+                        <div class="detail-value">14.6%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            const defaultConfig = {
+                dashboard_title: "Video2Audio Bot Admin",
+                stats_heading: "Foydalanuvchilar Statistikasi",
+            };
+
+            let usersChart, conversionsChart;
+
+            const dailyUsersData = {
+                labels: ["Dush", "Sesh", "Chor", "Pay", "Jum", "Shan", "Yak"],
+                data: [245, 312, 289, 401, 378, 456, 512],
+            };
+
+            const monthlyUsersData = {
+                labels: [
+                    "Yan",
+                    "Fev",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Iyun",
+                    "Iyul",
+                    "Avg",
+                    "Sen",
+                    "Okt",
+                    "Noy",
+                    "Dek",
+                ],
+                data: [
+                    1420, 1680, 1890, 2340, 2780, 3120, 3580, 4120, 4680, 5240,
+                    6120, 8562,
+                ],
+            };
+
+            const yearlyUsersData = {
+                labels: ["2020", "2021", "2022", "2023", "2024"],
+                data: [850, 2340, 4560, 6780, 8562],
+            };
+
+            const dailyConversionsData = {
+                labels: ["Dush", "Sesh", "Chor", "Pay", "Jum", "Shan", "Yak"],
+                data: [1240, 1580, 1420, 1890, 1760, 2140, 2350],
+            };
+
+            const monthlyConversionsData = {
+                labels: [
+                    "Yan",
+                    "Fev",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Iyun",
+                    "Iyul",
+                    "Avg",
+                    "Sen",
+                    "Okt",
+                    "Noy",
+                    "Dek",
+                ],
+                data: [
+                    2840, 3120, 3680, 4120, 4580, 5240, 6120, 7240, 8560, 9840,
+                    11240, 12847,
+                ],
+            };
+
+            const yearlyConversionsData = {
+                labels: ["2020", "2021", "2022", "2023", "2024"],
+                data: [4250, 12340, 21560, 34780, 45329],
+            };
+
+            function initCharts() {
+                const chartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: "#94a3b8",
+                                font: {
+                                    family: "Sora",
+                                    size: 11,
+                                },
+                            },
+                            grid: {
+                                color: "#f1f5f9",
+                            },
+                            border: {
+                                display: false,
+                            },
+                        },
+                        x: {
+                            ticks: {
+                                color: "#94a3b8",
+                                font: {
+                                    family: "Sora",
+                                    size: 11,
+                                },
+                            },
+                            grid: {
+                                display: false,
+                            },
+                            border: {
+                                display: false,
+                            },
+                        },
+                    },
+                };
+
+                const usersCtx = document
+                    .getElementById("usersChart")
+                    .getContext("2d");
+                usersChart = new Chart(usersCtx, {
+                    type: "line",
+                    data: {
+                        labels: dailyUsersData.labels,
+                        datasets: [
+                            {
+                                data: dailyUsersData.data,
+                                borderColor: "#3b82f6",
+                                backgroundColor: "rgba(59, 130, 246, 0.1)",
+                                fill: true,
+                                tension: 0.4,
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                pointHoverRadius: 6,
+                                pointBackgroundColor: "#3b82f6",
+                                pointBorderColor: "#fff",
+                                pointBorderWidth: 2,
+                            },
+                        ],
+                    },
+                    options: chartOptions,
+                });
+
+                const conversionsCtx = document
+                    .getElementById("conversionsChart")
+                    .getContext("2d");
+
+                const conversionsOptions = {
+                    ...chartOptions,
+                    layout: {
+                        padding: {
+                            left: 5,
+                            right: 5,
+                        },
+                    },
+                    scales: {
+                        ...chartOptions.scales,
+                        x: {
+                            ...chartOptions.scales.x,
+                            offset: true,
+                        },
+                    },
+                };
+
+                conversionsChart = new Chart(conversionsCtx, {
+                    type: "bar",
+                    data: {
+                        labels: dailyConversionsData.labels,
+                        datasets: [
+                            {
+                                data: dailyConversionsData.data,
+                                backgroundColor: "#3b82f6",
+                                borderRadius: 6,
+                                borderSkipped: false,
+                                barPercentage: 0.8,
+                                categoryPercentage: 0.9,
+                            },
+                        ],
+                    },
+                    options: conversionsOptions,
+                });
+            }
+
+            function updateUsersChart(period) {
+                const tabs = document.querySelectorAll(
+                    ".chart-card:first-child .chart-tab",
+                );
+                tabs.forEach((tab) => tab.classList.remove("active"));
+                event.target.classList.add("active");
+
+                let data;
+                if (period === "daily") data = dailyUsersData;
+                else if (period === "monthly") data = monthlyUsersData;
+                else data = yearlyUsersData;
+
+                usersChart.data.labels = data.labels;
+                usersChart.data.datasets[0].data = data.data;
+                usersChart.update();
+            }
+
+            function updateConversionsChart(period) {
+                const tabs = document.querySelectorAll(
+                    ".chart-card:last-child .chart-tab",
+                );
+                tabs.forEach((tab) => tab.classList.remove("active"));
+                event.target.classList.add("active");
+
+                let data;
+                if (period === "daily") data = dailyConversionsData;
+                else if (period === "monthly") data = monthlyConversionsData;
+                else data = yearlyConversionsData;
+
+                conversionsChart.data.labels = data.labels;
+                conversionsChart.data.datasets[0].data = data.data;
+                conversionsChart.update();
+            }
+
+            async function onConfigChange(config) {
+                const titleElement = document.getElementById("dashboardTitle");
+                const statsHeadingElement =
+                    document.getElementById("statsHeading");
+
+                titleElement.textContent =
+                    config.dashboard_title || defaultConfig.dashboard_title;
+                statsHeadingElement.textContent =
+                    config.stats_heading || defaultConfig.stats_heading;
+            }
+
+            function mapToCapabilities(config) {
+                return {
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined,
+                };
+            }
+
+            function mapToEditPanelValues(config) {
+                return new Map([
+                    [
+                        "dashboard_title",
+                        config.dashboard_title || defaultConfig.dashboard_title,
+                    ],
+                    [
+                        "stats_heading",
+                        config.stats_heading || defaultConfig.stats_heading,
+                    ],
+                ]);
+            }
+
+            if (window.elementSdk) {
+                window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange,
+                    mapToCapabilities,
+                    mapToEditPanelValues,
+                });
+            }
+
+            window.addEventListener("load", initCharts);
+        </script>
+        <script>
+            (function () {
+                function c() {
+                    var b = a.contentDocument || a.contentWindow.document;
+                    if (b) {
+                        var d = b.createElement("script");
+                        d.innerHTML =
+                            "window.__CF$cv$params={r:'9ba9550566f88ba1',t:'MTc2Nzg1MDUzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+                        b.getElementsByTagName("head")[0].appendChild(d);
+                    }
+                }
+                if (document.body) {
+                    var a = document.createElement("iframe");
+                    a.height = 1;
+                    a.width = 1;
+                    a.style.position = "absolute";
+                    a.style.top = 0;
+                    a.style.left = 0;
+                    a.style.border = "none";
+                    a.style.visibility = "hidden";
+                    document.body.appendChild(a);
+                    if ("loading" !== document.readyState) c();
+                    else if (window.addEventListener)
+                        document.addEventListener("DOMContentLoaded", c);
+                    else {
+                        var e = document.onreadystatechange || function () {};
+                        document.onreadystatechange = function (b) {
+                            e(b);
+                            "loading" !== document.readyState &&
+                                ((document.onreadystatechange = e), c());
+                        };
+                    }
+                }
+            })();
+        </script>
+    </body>
+</html>
