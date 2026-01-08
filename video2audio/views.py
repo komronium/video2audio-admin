@@ -66,6 +66,32 @@ class HomeView(View):
             ).count(),
         ]
 
+        january = datetime.date.today().replace(day=1, month=1)
+
+        monthly_users = [
+            User.objects.filter(joined_at__gte=january).count(),
+            User.objects.filter(
+                joined_at__gte=january + datetime.timedelta(days=30)
+            ).count(),
+            User.objects.filter(
+                joined_at__gte=january + datetime.timedelta(days=60)
+            ).count(),
+            User.objects.filter(
+                joined_at__gte=january + datetime.timedelta(days=90)
+            ).count(),
+            User.objects.filter(
+                joined_at__gte=january + datetime.timedelta(days=120)
+            ).count(),
+            User.objects.filter(
+                joined_at__gte=january + datetime.timedelta(days=150)
+            ).count(),
+            User.objects.filter(
+                joined_at__gte=january + datetime.timedelta(days=180)
+            ).count(),
+            User.objects.filter(
+                joined_at__gte=january + datetime.timedelta(days=210)
+            ).count(),
+        ]
         return render(
             request,
             "index.html",
@@ -77,6 +103,7 @@ class HomeView(View):
                 "premium_users": premium_users,
                 "premium_users_today": premium_users_today,
                 "daily_users": daily_users,
+                "monthly_users": monthly_users,
                 "daily_conversions": daily_conversions,
             },
         )
