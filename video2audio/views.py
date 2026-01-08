@@ -31,25 +31,25 @@ class HomeView(View):
         ]
 
         daily_conversions = [
-            Conversion.objects.filter(created_at__gte=monday).count(),
-            Conversion.objects.filter(
-                created_at__gte=monday + datetime.timedelta(days=1)
+            User.objects.filter(
+                joined_at=today - datetime.timedelta(days=6), is_premium=True
             ).count(),
-            Conversion.objects.filter(
-                created_at__gte=monday + datetime.timedelta(days=2)
+            User.objects.filter(
+                joined_at=today - datetime.timedelta(days=5), is_premium=True
             ).count(),
-            Conversion.objects.filter(
-                created_at__gte=monday + datetime.timedelta(days=3)
+            User.objects.filter(
+                joined_at=today - datetime.timedelta(days=4), is_premium=True
             ).count(),
-            Conversion.objects.filter(
-                created_at__gte=monday + datetime.timedelta(days=4)
+            User.objects.filter(
+                joined_at=today - datetime.timedelta(days=3), is_premium=True
             ).count(),
-            Conversion.objects.filter(
-                created_at__gte=monday + datetime.timedelta(days=5)
+            User.objects.filter(
+                joined_at=today - datetime.timedelta(days=2), is_premium=True
             ).count(),
-            Conversion.objects.filter(
-                created_at__gte=monday + datetime.timedelta(days=6)
+            User.objects.filter(
+                joined_at=today - datetime.timedelta(days=1), is_premium=True
             ).count(),
+            User.objects.filter(joined_at=today, is_premium=True).count(),
         ]
 
         january = datetime.date.today().replace(day=1, month=1)
