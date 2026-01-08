@@ -19,6 +19,30 @@ class HomeView(View):
             is_premium=True, joined_at=datetime.date.today()
         ).count()
 
+        weekly_users = [
+            User.objects.filter(
+                joined_at__week=datetime.date.today().isocalendar()[1]
+            ).count(),
+            User.objects.filter(
+                joined_at__week=datetime.date.today().isocalendar()[1] - 1
+            ).count(),
+            User.objects.filter(
+                joined_at__week=datetime.date.today().isocalendar()[1] - 2
+            ).count(),
+            User.objects.filter(
+                joined_at__week=datetime.date.today().isocalendar()[1] - 3
+            ).count(),
+            User.objects.filter(
+                joined_at__week=datetime.date.today().isocalendar()[1] - 4
+            ).count(),
+            User.objects.filter(
+                joined_at__week=datetime.date.today().isocalendar()[1] - 5
+            ).count(),
+            User.objects.filter(
+                joined_at__week=datetime.date.today().isocalendar()[1] - 6
+            ).count(),
+        ]
+
         return render(
             request,
             "index.html",
@@ -29,5 +53,6 @@ class HomeView(View):
                 "conversions_today": conversions_today,
                 "premium_users": premium_users,
                 "premium_users_today": premium_users_today,
+                "weekly_users": weekly_users,
             },
         )
