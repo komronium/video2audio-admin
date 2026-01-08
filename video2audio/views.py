@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from django.shortcuts import render
 from django.views import View
@@ -93,7 +94,7 @@ class HomeView(View):
             request,
             "index.html",
             {
-                "weekdays": str(weekdays),
+                "weekdays": json.dumps(weekdays),
                 "users": users,
                 "users_today": users_today,
                 "conversions": conversions,
