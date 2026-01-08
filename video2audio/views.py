@@ -19,4 +19,15 @@ class HomeView(View):
             is_premium=True, joined_at=datetime.date.today()
         ).count()
 
-        return render(request, "index.html")
+        return render(
+            request,
+            "index.html",
+            {
+                "users": users,
+                "users_today": users_today,
+                "conversions": conversions,
+                "conversions_today": conversions_today,
+                "premium_users": premium_users,
+                "premium_users_today": premium_users_today,
+            },
+        )

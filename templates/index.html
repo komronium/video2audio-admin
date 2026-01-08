@@ -293,7 +293,9 @@
                         <div class="stat-icon">👥</div>
                     </div>
                     <div class="stat-value">{{ users | default:0}}</div>
-                    <div class="stat-change">{% if users_today > 0 %} + {{ users_today }}{% endif %}</div>
+                    <div class="stat-change">
+                        {% if users_today > 0 %} + {{ users_today }}{% endif %}
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
@@ -301,7 +303,10 @@
                         <div class="stat-icon">🎵</div>
                     </div>
                     <div class="stat-value">{{ conversions | default:0}}</div>
-                    <div class="stat-change">{% if conversions_today > 0 %} + {{ conversions_today }}{% endif %}</div>
+                    <div class="stat-change">
+                        {% if conversions_today > 0 %} + {{ conversions_today
+                        }}{% endif %}
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
@@ -309,7 +314,10 @@
                         <div class="stat-icon">⭐</div>
                     </div>
                     <div class="stat-value">{{ premium_users | default:0}}</div>
-                    <div class="stat-change">{% if premium_users_today > 0 %} + {{ premium_users_today }}{% endif %}</div>
+                    <div class="stat-change">
+                        {% if premium_users_today > 0 %} + {{
+                        premium_users_today }}{% endif %}
+                    </div>
                 </div>
             </div>
             <div class="charts-section">
