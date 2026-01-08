@@ -19,27 +19,28 @@ class HomeView(View):
             is_premium=True, joined_at=datetime.date.today()
         ).count()
 
-        weekly_users = [
+        monday = datetime.date.today() - datetime.timedelta(
+            days=datetime.date.today().weekday()
+        )
+        daily_users = [
+            User.objects.filter(joined_at__gte=monday).count(),
             User.objects.filter(
-                joined_at__week=datetime.date.today().isocalendar()[1]
+                joined_at__gte=monday + datetime.timedelta(days=1)
             ).count(),
             User.objects.filter(
-                joined_at__week=datetime.date.today().isocalendar()[1] - 1
+                joined_at__gte=monday + datetime.timedelta(days=2)
             ).count(),
             User.objects.filter(
-                joined_at__week=datetime.date.today().isocalendar()[1] - 2
+                joined_at__gte=monday + datetime.timedelta(days=3)
             ).count(),
             User.objects.filter(
-                joined_at__week=datetime.date.today().isocalendar()[1] - 3
+                joined_at__gte=monday + datetime.timedelta(days=4)
             ).count(),
             User.objects.filter(
-                joined_at__week=datetime.date.today().isocalendar()[1] - 4
+                joined_at__gte=monday + datetime.timedelta(days=5)
             ).count(),
             User.objects.filter(
-                joined_at__week=datetime.date.today().isocalendar()[1] - 5
-            ).count(),
-            User.objects.filter(
-                joined_at__week=datetime.date.today().isocalendar()[1] - 6
+                joined_at__gte=monday + datetime.timedelta(days=6)
             ).count(),
         ]
 
@@ -53,6 +54,6 @@ class HomeView(View):
                 "conversions_today": conversions_today,
                 "premium_users": premium_users,
                 "premium_users_today": premium_users_today,
-                "weekly_users": weekly_users,
+                "daily_users": daily_users,
             },
         )
